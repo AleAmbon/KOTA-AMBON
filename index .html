@@ -1,0 +1,541 @@
+<html lang="id">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1" name="viewport"/>
+  <title>
+   Tempat Wisata Kota Ambon - Plafon Menari Interaktif
+  </title>
+  <script src="https://cdn.tailwindcss.com">
+  </script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+  <style>
+   body {
+    font-family: "Poppins", sans-serif;
+   }
+   /* Animasi plafon menari */
+   .plafon-container {
+    perspective: 1000px;
+   }
+   .plafon-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-gap: 12px;
+    max-width: 700px;
+    margin: 0 auto;
+   }
+   .plafon-tile {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #7c3aed, #a78bfa);
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(124, 58, 237, 0.4);
+    cursor: pointer;
+    transform-style: preserve-3d;
+    transition: transform 0.5s ease, box-shadow 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 700;
+    font-size: 1.5rem;
+    user-select: none;
+    will-change: transform;
+    text-shadow: 0 0 6px rgba(255, 255, 255, 0.8);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    font-family: "Poppins", sans-serif;
+    position: relative;
+   }
+   .plafon-tile:hover {
+    transform: rotateY(180deg) scale(1.15);
+    box-shadow: 0 12px 24px rgba(124, 58, 237, 0.9);
+    z-index: 10;
+    text-shadow: 0 0 12px #e0c3fc, 0 0 20px #8a2be2;
+   }
+   .plafon-tile-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.5s;
+    transform-style: preserve-3d;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 8px;
+    box-sizing: border-box;
+   }
+   .plafon-tile.flipped .plafon-tile-inner {
+    transform: rotateY(180deg);
+   }
+   .plafon-front,
+   .plafon-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    box-sizing: border-box;
+   }
+   .plafon-front {
+    background: linear-gradient(135deg, #7c3aed, #a78bfa);
+    color: white;
+    font-weight: 800;
+    font-size: 1.5rem;
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.9);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-family: "Poppins", sans-serif;
+    user-select: none;
+    position: relative;
+    z-index: 2;
+   }
+   .plafon-back {
+    background: linear-gradient(135deg, #a78bfa, #7c3aed);
+    color: #f3f4f6;
+    transform: rotateY(180deg);
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.3;
+    font-style: italic;
+    text-align: center;
+    box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.3);
+    font-family: "Poppins", sans-serif;
+    position: relative;
+    z-index: 1;
+   }
+   @media (max-width: 640px) {
+    .plafon-grid {
+     grid-template-columns: repeat(4, 1fr);
+     grid-gap: 10px;
+    }
+    .plafon-tile {
+     width: 70px;
+     height: 70px;
+     font-size: 1.25rem;
+    }
+    .plafon-front {
+     font-size: 1.25rem;
+    }
+    .plafon-back {
+     font-size: 0.9rem;
+    }
+   }
+  </style>
+ </head>
+ <body class="bg-gray-50 text-gray-800">
+  <!-- Navbar -->
+  <nav class="bg-white shadow-md fixed w-full z-30">
+   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between h-16 items-center">
+     <div class="flex-shrink-0 text-2xl font-semibold text-indigo-600 flex items-center space-x-2">
+      <i class="fas fa-map-marker-alt">
+      </i>
+      <span>
+       Wisata Ambon
+      </span>
+     </div>
+     <div class="hidden md:flex space-x-8 font-medium">
+      <a class="hover:text-indigo-600 transition" href="#home">
+       Home
+      </a>
+      <a class="hover:text-indigo-600 transition" href="#lokasi">
+       Lokasi JPS
+      </a>
+      <a class="hover:text-indigo-600 transition" href="#harga">
+       Harga Masuk
+      </a>
+      <a class="hover:text-indigo-600 transition" href="#makanan">
+       Makanan Khas
+      </a>
+     </div>
+     <div class="md:hidden">
+      <button aria-expanded="false" aria-label="Toggle menu" class="focus:outline-none" id="menu-btn">
+       <i class="fas fa-bars text-2xl">
+       </i>
+      </button>
+     </div>
+    </div>
+   </div>
+   <div aria-label="Mobile menu" class="hidden md:hidden bg-white shadow-md" id="mobile-menu" role="menu">
+    <a class="block px-4 py-3 border-b border-gray-200 hover:bg-indigo-50 transition" href="#home" role="menuitem">
+     Home
+    </a>
+    <a class="block px-4 py-3 border-b border-gray-200 hover:bg-indigo-50 transition" href="#lokasi" role="menuitem">
+     Lokasi JPS
+    </a>
+    <a class="block px-4 py-3 border-b border-gray-200 hover:bg-indigo-50 transition" href="#harga" role="menuitem">
+     Harga Masuk
+    </a>
+    <a class="block px-4 py-3 hover:bg-indigo-50 transition" href="#makanan" role="menuitem">
+     Makanan Khas
+    </a>
+   </div>
+  </nav>
+  <!-- Hero Section with Interactive Plafon Menari -->
+  <section class="pt-20 bg-gradient-to-r from-indigo-500 to-purple-600 text-white" id="home">
+   <div class="max-w-7xl mx-auto px-6 py-16 flex flex-col items-center">
+    <h1 class="text-5xl font-extrabold leading-tight mb-8 text-center tracking-widest drop-shadow-lg">
+     Selamat Datang di
+     <span class="text-yellow-300">
+      Kota AMBON
+     </span>
+    </h1>
+    <p class="text-xl max-w-3xl mb-12 text-center font-semibold tracking-wide drop-shadow-md">
+     Kota yang dikenal sebagai
+     <span class="text-yellow-300 italic font-extrabold">
+      Kota Musik
+     </span>
+     dengan pesona budaya dan keindahan yang memukau. Nikmati atraksi
+     <span class="text-yellow-300 italic font-extrabold">
+      Plafon Menari
+     </span>
+     interaktif, lokasi wisata eksotis, harga masuk terjangkau, dan kuliner khas
+     yang menggugah selera.
+    </p>
+    <div aria-label="Plafon Menari Interaktif" class="plafon-container mb-12" role="list">
+     <div class="plafon-grid" id="plafonGrid">
+      <div aria-label="Seni - Warisan budaya Ambon yang memukau dengan gerakan dinamis dan warna-warni" aria-pressed="false" class="plafon-tile" role="button" tabindex="0">
+       <div class="plafon-tile-inner">
+        <div aria-hidden="true" class="plafon-front">
+         Seni
+        </div>
+        <div class="plafon-back">
+         Warisan budaya Ambon yang memukau dengan gerakan dinamis dan warna-warni.
+        </div>
+       </div>
+      </div>
+      <div aria-label="Warna - Motif warna-warni cerah yang melambangkan keceriaan dan semangat masyarakat" aria-pressed="false" class="plafon-tile" role="button" tabindex="0">
+       <div class="plafon-tile-inner">
+        <div aria-hidden="true" class="plafon-front">
+         Warna
+        </div>
+        <div class="plafon-back">
+         Motif warna-warni cerah yang melambangkan keceriaan dan semangat masyarakat.
+        </div>
+       </div>
+      </div>
+      <div aria-label="Musik - Irama musik tradisional yang mengiringi gerakan plafon menari" aria-pressed="false" class="plafon-tile" role="button" tabindex="0">
+       <div class="plafon-tile-inner">
+        <div aria-hidden="true" class="plafon-front">
+         Musik
+        </div>
+        <div class="plafon-back">
+         Irama musik tradisional yang mengiringi gerakan plafon menari.
+        </div>
+       </div>
+      </div>
+      <div aria-label="Gerak - Gerakan dinamis dan harmonis yang memikat setiap penonton" aria-pressed="false" class="plafon-tile" role="button" tabindex="0">
+       <div class="plafon-tile-inner">
+        <div aria-hidden="true" class="plafon-front">
+         Gerak
+        </div>
+        <div class="plafon-back">
+         Gerakan dinamis dan harmonis yang memikat setiap penonton.
+        </div>
+       </div>
+      </div>
+      <div aria-label="Budaya - Simbol kekayaan budaya dan tradisi masyarakat Ambon" aria-pressed="false" class="plafon-tile" role="button" tabindex="0">
+       <div class="plafon-tile-inner">
+        <div aria-hidden="true" class="plafon-front">
+         Budaya
+        </div>
+        <div class="plafon-back">
+         Simbol kekayaan budaya dan tradisi masyarakat Ambon.
+        </div>
+       </div>
+      </div>
+      <div aria-label="Cerita - Kisah dan legenda yang diwariskan turun-temurun melalui tarian" aria-pressed="false" class="plafon-tile" role="button" tabindex="0">
+       <div class="plafon-tile-inner">
+        <div aria-hidden="true" class="plafon-front">
+         Cerita
+        </div>
+        <div class="plafon-back">
+         Kisah dan legenda yang diwariskan turun-temurun melalui tarian.
+        </div>
+       </div>
+      </div>
+      <div aria-label="Soya Soya - Tarian khas Maluku yang penuh semangat dan gerakan energik" aria-pressed="false" class="plafon-tile" role="button" tabindex="0">
+       <div class="plafon-tile-inner">
+        <div aria-hidden="true" class="plafon-front">
+         Soya Soya
+        </div>
+        <div class="plafon-back">
+         Tarian khas Maluku yang penuh semangat dan gerakan energik, melambangkan kegembiraan masyarakat.
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+    <a aria-label="Jelajahi Sekarang" class="inline-block bg-yellow-400 text-indigo-900 font-extrabold px-8 py-4 rounded-lg shadow-lg hover:bg-yellow-300 transition text-lg tracking-wide drop-shadow-md" href="#lokasi" role="button">
+     Jelajahi Sekarang
+    </a>
+   </div>
+  </section>
+  <!-- Lokasi JPS Section -->
+  <section class="max-w-7xl mx-auto px-6 py-16" id="lokasi">
+   <h2 class="text-3xl font-bold text-indigo-700 mb-8 text-center tracking-wide drop-shadow-sm">
+    Lokasi JPS (Jalan Pantai Suli)
+   </h2>
+   <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+    <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition">
+     <img alt="Pantai Suli Ambon dengan pemandangan matahari terbenam yang indah di tepi pantai berpasir putih dan langit jingga" class="w-full h-48 object-cover" height="250" src="pantai suli kota ambon.jpeg" width="400"/>
+     <div class="p-4">
+      <h3 class="font-semibold text-lg mb-2 text-indigo-800 tracking-wide">
+       Pantai Suli
+      </h3>
+      <p class="text-gray-600 text-sm leading-relaxed">
+       Pantai yang terkenal dengan pasir putih dan pemandangan sunset yang memukau, cocok untuk bersantai dan berfoto.
+      </p>
+     </div>
+    </div>
+    <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition">
+     <img alt="Jembatan Merah di Ambon dengan latar belakang laut biru dan langit cerah, struktur jembatan berwarna merah mencolok" class="w-full h-48 object-cover" height="250" src="Jembatan-Merah-Putih.jpg" width="400"/>
+     <div class="p-4">
+      <h3 class="font-semibold text-lg mb-2 text-indigo-800 tracking-wide">
+       Jembatan Merah
+      </h3>
+      <p class="text-gray-600 text-sm leading-relaxed">
+       Ikon kota Ambon yang menghubungkan dua bagian kota dengan pemandangan laut yang menawan.
+      </p>
+     </div>
+    </div>
+    <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition">
+     <img alt="Pasar Mardika di Ambon dengan suasana pasar tradisional ramai, pedagang dan pembeli berwarna-warni" class="w-full h-48 object-cover" height="250" src="pasar mardika.jpg" width="400"/>
+     <div class="p-4">
+      <h3 class="font-semibold text-lg mb-2 text-indigo-800 tracking-wide">
+       Pasar Mardika
+      </h3>
+      <p class="text-gray-600 text-sm leading-relaxed">
+       Pasar tradisional terbesar di Ambon, tempat terbaik untuk membeli oleh-oleh dan merasakan suasana lokal.
+      </p>
+     </div>
+    </div>
+   </div>
+   <h2 class="text-3xl font-bold text-indigo-700 mt-16 mb-8 text-center tracking-wide drop-shadow-sm">
+    Gedung Pemerintahan dan Kantor Walikota Ambon
+   </h2>
+   <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+    <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition">
+     <img alt="Gedung Kantor Gubernur Maluku di Ambon, bangunan megah dengan arsitektur modern dan bendera Indonesia berkibar di depan" class="w-full h-56 object-cover" height="350" src="kantor gubernur maluku.gif" width="600"/>
+     <div class="p-4">
+      <h3 class="font-semibold text-lg mb-2 text-indigo-800 tracking-wide">
+       Kantor Gubernur Maluku
+      </h3>
+      <p class="text-gray-600 text-sm leading-relaxed">
+       Gedung pemerintahan utama di Maluku yang menjadi pusat administrasi dan kebijakan daerah.
+      </p>
+     </div>
+    </div>
+    <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition">
+     <img alt="Kantor Walikota Ambon, bangunan resmi pemerintah kota dengan taman hijau dan bendera merah putih di halaman depan" class="w-full h-56 object-cover" height="350" src="kantor wali kota ambon.jpg" width="600"/>
+     <div class="p-4">
+      <h3 class="font-semibold text-lg mb-2 text-indigo-800 tracking-wide">
+       Kantor Walikota Ambon
+      </h3>
+      <p class="text-gray-600 text-sm leading-relaxed">
+       Kantor pusat pemerintahan kota Ambon yang melayani berbagai kebutuhan administrasi masyarakat.
+      </p>
+     </div>
+    </div>
+   </div>
+  </section>
+  <!-- Harga Masuk Section -->
+  <section class="bg-indigo-50 py-16" id="harga">
+   <div class="max-w-7xl mx-auto px-6">
+    <h2 class="text-3xl font-bold text-indigo-700 mb-10 text-center tracking-wide drop-shadow-sm">
+     Harga Masuk Tempat Wisata
+    </h2>
+    <div class="max-w-4xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-8 text-center">
+     <div class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition">
+      <i class="fas fa-user fa-3x text-indigo-600 mb-4">
+      </i>
+      <h3 class="text-xl font-semibold mb-2 tracking-wide">
+       Dewasa
+      </h3>
+      <p class="text-indigo-700 font-bold text-lg">
+       Rp 25.000
+      </p>
+     </div>
+     <div class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition">
+      <i class="fas fa-child fa-3x text-indigo-600 mb-4">
+      </i>
+      <h3 class="text-xl font-semibold mb-2 tracking-wide">
+       Anak-anak
+      </h3>
+      <p class="text-indigo-700 font-bold text-lg">
+       Rp 15.000
+      </p>
+     </div>
+     <div class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition">
+      <i class="fas fa-wheelchair fa-3x text-indigo-600 mb-4">
+      </i>
+      <h3 class="text-xl font-semibold mb-2 tracking-wide">
+       Lansia &amp; Difabel
+      </h3>
+      <p class="text-indigo-700 font-bold text-lg">
+       Gratis
+      </p>
+     </div>
+    </div>
+   </div>
+  </section>
+  <!-- Makanan Khas Daerah Section -->
+  <section class="max-w-7xl mx-auto px-6 py-16" id="makanan">
+   <h2 class="text-3xl font-bold text-indigo-700 mb-10 text-center tracking-wide drop-shadow-sm">
+    Makanan Khas Kota Ambon
+   </h2>
+   <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10">
+    <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition">
+     <img alt="Ikan Kuah Asam khas Ambon, hidangan ikan segar dengan kuah asam pedas berwarna merah menyala dalam mangkuk putih" class="w-full h-48 object-cover" height="300" src="1576062813731-ikan-kuah-kuning.jpg" width="400"/>
+     <div class="p-4">
+      <h3 class="font-semibold text-lg mb-2 text-indigo-800 tracking-wide">
+       Ikan Kuah Asam
+      </h3>
+      <p class="text-gray-600 text-sm leading-relaxed">
+       Hidangan ikan segar dengan kuah asam pedas yang segar dan menggugah selera, favorit masyarakat Ambon.
+      </p>
+     </div>
+    </div>
+    <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition">
+     <img alt="Papeda khas Ambon, makanan dari sagu berwarna putih lengket disajikan dengan kuah ikan kuning gurih" class="w-full h-48 object-cover" height="300" src="makanan-khas-Papua-Barat-5-Wikipedia-696x525.jpg" width="400"/>
+     <div class="p-4">
+      <h3 class="font-semibold text-lg mb-2 text-indigo-800 tracking-wide">
+       Papeda
+      </h3>
+      <p class="text-gray-600 text-sm leading-relaxed">
+       Makanan khas dari sagu yang lengket, biasanya disajikan dengan kuah ikan kuning yang gurih.
+      </p>
+     </div>
+    </div>
+    <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition">
+     <img alt="Rendang khas Ambon, daging sapi dimasak dengan bumbu rempah pedas dan kaya rasa berwarna coklat gelap" class="w-full h-48 object-cover" height="300" src="27-1536x864 rendang.jpg" width="400"/>
+     <div class="p-4">
+      <h3 class="font-semibold text-lg mb-2 text-indigo-800 tracking-wide">
+       Rendang Ambon
+      </h3>
+      <p class="text-gray-600 text-sm leading-relaxed">
+       Rendang dengan cita rasa khas Ambon yang pedas dan kaya rempah, sangat cocok untuk pecinta makanan pedas.
+      </p>
+     </div>
+    </div>
+    <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition">
+     <img alt="Gohu Ikan khas Ambon, salad ikan mentah dengan bumbu pedas dan segar disajikan di piring putih" class="w-full h-48 object-cover" height="300" src="gogos ambon.jpg" width="400"/>
+     <div class="p-4">
+      <h3 class="font-semibold text-lg mb-2 text-indigo-800 tracking-wide">
+       Gohu Ikan
+      </h3>
+      <p class="text-gray-600 text-sm leading-relaxed">
+       Salad ikan mentah dengan bumbu pedas dan segar, makanan khas yang sangat populer di Ambon.
+      </p>
+     </div>
+    </div>
+    <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition">
+     <img alt="Kue Sagu khas Ambon, kue tradisional manis berwarna coklat keemasan dengan tekstur renyah" class="w-full h-48 object-cover" height="300" src="sagu ambon.jpeg" width="400"/>
+     <div class="p-4">
+      <h3 class="font-semibold text-lg mb-2 text-indigo-800 tracking-wide">
+       Kue Sagu
+      </h3>
+      <p class="text-gray-600 text-sm leading-relaxed">
+       Kue tradisional manis dari sagu dengan tekstur renyah dan rasa gurih manis, cemilan favorit warga Ambon.
+      </p>
+     </div>
+    </div>
+    <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition">
+     <img alt="Es Pisang Ijo khas Ambon, dessert dingin dengan pisang dibalut adonan hijau dan sirup manis disajikan dalam mangkuk" class="w-full h-48 object-cover" height="300" src="Resep-Es-Pisang-Ijo-Kuliner-Tradisional-Khas-ambon.jpg" width="400"/>
+     <div class="p-4">
+      <h3 class="font-semibold text-lg mb-2 text-indigo-800 tracking-wide">
+       Es Pisang Ijo
+      </h3> 
+      <p class="text-gray-600 text-sm leading-relaxed">
+       Dessert dingin dengan pisang yang dibalut adonan hijau dan disajikan dengan sirup manis, sangat menyegarkan.
+      </p>
+     </div>
+    </div>
+   </div>
+  </section>
+  <!-- Tarian Khas Maluku Section -->
+  <section class="max-w-7xl mx-auto px-6 py-16 bg-indigo-50 rounded-lg shadow-lg mb-16" id="tarian">
+   <h2 class="text-3xl font-bold text-indigo-700 mb-8 text-center tracking-wide drop-shadow-sm">
+    Tarian Khas Maluku:
+    <span class="text-yellow-400">
+     Soya Soya
+    </span>
+   </h2>
+   <div class="flex flex-col md:flex-row items-center md:space-x-12 max-w-5xl mx-auto">
+    <img alt="Tarian Soya Soya khas Maluku, sekelompok penari mengenakan pakaian tradisional berwarna cerah sedang menari dengan gerakan energik di ruang terbuka" class="w-full md:w-1/2 rounded-lg shadow-lg object-cover" height="400" src="dev-tari-tarian-khas-maluku-pukau-laskar-gerhana-di-fort-maluku.jpeg" width="600"/>
+    <div class="mt-8 md:mt-0 md:w-1/2 text-indigo-800">
+     <p class="text-lg leading-relaxed font-semibold tracking-wide">
+      <span class="text-yellow-500 font-extrabold italic">
+       Soya Soya
+      </span>
+      adalah
+      tarian tradisional khas Maluku yang penuh semangat dan energi. Tarian ini
+      biasanya dilakukan secara berkelompok dengan gerakan yang dinamis dan
+      ritmis, melambangkan kegembiraan dan kebersamaan masyarakat Maluku dalam
+      merayakan berbagai acara adat dan budaya.
+     </p>
+     <p class="mt-4 text-indigo-700 italic font-medium tracking-wide">
+      Tarian Soya Soya tidak hanya menjadi hiburan, tetapi juga sarana pelestarian
+      budaya yang menghubungkan generasi muda dengan akar tradisi mereka.
+     </p>
+    </div>
+   </div>
+  </section>
+  <!-- Footer -->
+  <footer class="bg-indigo-700 text-indigo-100 py-8 mt-16">
+   <div class="max-w-7xl mx-auto px-6 text-center">
+    <p class="tracking-wide font-semibold">
+     © 2024 Wisata Ambon. Semua hak cipta  RISKI OLLAN.
+    </p>
+    <div class="mt-4 space-x-6 text-xl">
+     <a aria-label="Facebook" class="hover:text-white" href="#">
+      <i class="fab fa-facebook-f">
+      </i>
+     </a>
+     <a aria-label="Twitter" class="hover:text-white" href="#">
+      <i class="fab fa-twitter">
+      </i>
+     </a>
+     <a aria-label="Instagram" class="hover:text-white" href="#">
+      <i class="fab fa-instagram">
+      </i> 
+     </a>
+    </div>
+   </div> 
+  </footer>
+  <script>
+   const menuBtn = document.getElementById("menu-btn");
+   const mobileMenu = document.getElementById("mobile-menu");
+
+   menuBtn.addEventListener("click", () => {
+    mobileMenu.classList.toggle("hidden");
+    const expanded = menuBtn.getAttribute("aria-expanded") === "true";
+    menuBtn.setAttribute("aria-expanded", !expanded);
+   });
+
+   // Flip tile on click or keyboard enter/space
+   const tiles = document.querySelectorAll(".plafon-tile");
+   tiles.forEach((tile) => {
+    tile.addEventListener("click", () => {
+     tile.classList.toggle("flipped");
+     const pressed = tile.getAttribute("aria-pressed") === "true";
+     tile.setAttribute("aria-pressed", !pressed);
+    });
+    tile.addEventListener("keydown", (e) => {
+     if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      tile.classList.toggle("flipped");
+      const pressed = tile.getAttribute("aria-pressed") === "true";
+      tile.setAttribute("aria-pressed", !pressed);
+     }
+    });
+   });
+  </script>
+ </body>
+</html>
